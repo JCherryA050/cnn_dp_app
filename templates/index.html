@@ -1,29 +1,41 @@
 <!doctype html>
-<title>Python Flask File Upload Example</title>
+<html>
+  <head>
+    <!--
+      This is the title that appears in the browser tab.
+      Replace it with the title of your app
+    -->
+    <title>Spring Fawn Predictor</title>
+    <link rel="stylesheet" media="screen" href="/static/bootstrap.min.css">
+    <!-- If you add custom CSS, put it after the above bootstrap link -->
+  </head>
 <h2>Select a file to upload</h2>
-<p>
-	{% with messages = get_flashed_messages() %}
-	  {% if messages %}
-		<ul>
-		{% for message in messages %}
-		  <li>{{ message }}</li>
-		{% endfor %}
-		</ul>
-	  {% endif %}
-	{% endwith %}
-</p>
-{% if filename %}
-	<div>
-		<img src="{{ url_for('display_image', filename=filename) }}">
-	</div>
-{% endif %}
-<form method="post" action="/" enctype="multipart/form-data">
-    <dl>
+	<body>
 		<p>
-			<input type="file" name="file" autocomplete="off" required>
+			{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<ul>
+				{% for message in messages %}
+				<li>{{ message }}</li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+			{% endwith %}
 		</p>
-    </dl>
-    <p>
-		<input type="submit" value="Submit">
-	</p>
-</form>
+		{% if filename %}
+			<div>
+				<img src="{{ url_for('display_image', filename=filename)}}">
+			</div>
+		{% endif %}
+		<form method="post" action="/" enctype="multipart/form-data">
+			<dl>
+				<p>
+					<input type="file" name="file" autocomplete="off" required>
+				</p>
+			</dl>
+			<p>
+				<input type="submit" value="Submit">
+			</p>
+		</form>
+	</body>
+</html>

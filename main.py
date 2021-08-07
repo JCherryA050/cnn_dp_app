@@ -14,13 +14,22 @@ from glob import glob
 import cv2
 import os
 
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 # Setting the random seed for reproducability
 np.random.seed(123)
 
 def getPrediction(filename):
 
+    dir = './split'
+    remove_files = glob(os.path.join(dir,'*'))
+    for f in os.listdir(dir):
+        os.remove(os.path.join(dir,f))
+   
     image = load_img('./static/uploads/'+filename)
-    image_name = filename.replace('.png','')
+    image_name = filename.replace('.jpg','')
 
     height_num = image.height/50
     width_num = image.width/50
@@ -42,8 +51,8 @@ def getPrediction(filename):
             # os.mkdir('./test/9037_split')
             im1.save('./split/'+image_name+'_'+str(right)+'_'+str(bottom)+'.png')
 
-    data = glob('./split/*.png')
-    model = load_model('./models/denseNet201.h5')
+    data = glob('./split/'+image_name+'*.png')
+    model = load_model('./models/second_reg.h5')
 
     def make_prediction(img_path,target_size):
         img = load_img(img_path,target_size=target_size)
@@ -54,7 +63,7 @@ def getPrediction(filename):
      
     predictions = []
     for path in data:
-        predictions.append(make_prediction(path,(50,50)))
+        predictions.append(make_prediction(path,(100,100)))
     predictions_array = np.array(predictions)
     normalized_predictions = (predictions_array - min(predictions_array))/(max(predictions_array) - min(predictions_array))
     # Separating file name from the path of the file
@@ -96,5 +105,16 @@ def getPrediction(filename):
     image_and_heatmap = Image.new('RGB',(800,400))
     image_and_heatmap.paste(smaller_map,(0,0))
     image_and_heatmap.paste(smaller_image,(400,0))
-    image_and_heatmap.save('./static/uploads/new_image.png',)
+    image_and_heatmap.save('./static/uploads/new_image.png')
+
+    predictions_array_short = predictions_array[predictions_array > 0.05]
+
+    fig = plt.figure(figsize=(20,10))
+    sns.histplot(predictions_array_short, stat='frequency',bins=20)
+    plt.axvline(x=0.5,color='tab:red')
+    plt.ylabel('Frequency of Predictions',size=16)
+    plt.xlabel('Probability of IDC-Positive',size=16)
+    fig.tight_layout()
+    fig.savefig('./static/uploads/new_hist.png')
+
     return image_file_name

@@ -61,7 +61,7 @@ def upload_image():
 		file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		#print('upload_image filename: ' + filename)
 		flash('Image successfully uploaded and displayed below')
-		return render_template('index.html', filename=getPrediction(filename))
+		return render_template('results.html', filename=getPrediction(filename))
 	else:
 		flash('Allowed image types are -> png, jpg, jpeg, gif')
 		return redirect(request.url)
@@ -69,7 +69,11 @@ def upload_image():
 @app.route('/display/<filename>')
 def display_image(filename):
 	#print('display_image filename: ' + filename)
-	return redirect(url_for('static', filename='uploads/' + filename), code=301)
+	return redirect(url_for('static', filename='uploads/new_image.png'), code=301)
+
+@app.route('/display/<filename>')
+def display_histogram(filename):
+    	return redirect(url_for('static', filename='uploads/new_hist.png'), code=301)
 
 if __name__ == "__main__":
     app.run()

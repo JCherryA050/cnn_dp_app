@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color:white;">
+    <head>
+        <!--
+        This is the title that appears in the browser tab.
+        Replace it with the title of your app
+        -->
+        <title >Image Results</title>
+        <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    </head>
+    <body>
+        <div class="container">
+            <div class="jumbotron">
+                <h1 class="display-4" style="background-color: grey; text-align: center;" >Results</h1>
+            </div>
+            <div class="container">
+                <!-- 
+                This table contains the result as a large number surrounded by smaller
+                text. It uses a table rather than bootstrap rows/cols in order to use
+                the align-middle CSS class
+                -->
+                <div class="row">
+                    <tr>
+                        <td class="align-middle" style="width: 33%; text-align: middle;">
+                            Heat Map of affected regions scaled by probability of IDC-Positive. Light regions indicating high probability.
+                        </td>
+                    </tr>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col" style="text-align: center;">
+                        <!-- 
+                        Replace this with something relevant, maybe a freshly-generated
+                        matplotlib graph?
+                        -->
+                        <img src="{{ url_for('display_image', filename=filename) }}" 
+                        alt="upward sloping chart" width="50%">
+                    </div>
+                    <hr>
+                    <div class="col" style="text-align: center;">            
+                        <td class="align-middle" style="width: 33%; text-align: middle;">
+                            Distribution of probabilities in whole slide image.
+                        </td>
+                    </div>
+
+                    <div class="col" style="text-align: center;">
+
+                        <img src="{{ url_for('display_histogram', filename=filename) }}" 
+                        alt="upward sloping chart" width="50%">
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col" style="text-align: center;">
+                        <a href="/">Go back home</a>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </body>
+</html>
